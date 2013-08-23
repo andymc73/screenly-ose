@@ -1,0 +1,25 @@
+Instructions for testing off of the Raspberry Pi - 
+Example using Debian Squeeze:
+
+apt-get install python-requests python-netifaces uzbl socat feh
+cd directory/above/screenly
+mkdir mypy
+virtualenv mypy
+pip install -E mypy sh
+pip install -E mypy hurry.filesize
+pip install -E mypy uptime
+pip install -E mypy bottle-haml
+pip install -E mypy --upgrade bottle
+pip install -E mypy --upgrade mako
+
+In one terminal:
+
+source mypy/bin/activate
+cd screenly
+python server.py
+
+In another terminal:
+
+source mypy/bin/activate
+cd screenly
+misc/xloader.sh
