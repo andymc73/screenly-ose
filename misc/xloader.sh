@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Script modified by Andrew McDonnell bugs@andrewmcdonnell.net under GPLv2
+# - added SCREENLY_DIR and STARTUP_DELAY environment variables
+
 # Ordinarily wait 5 seconds before starting, to give system time to settle.
 # When developing we want to skip that, so set in environment
 STARTUP_DELAY=${STARTUP_DELAY:-5}
