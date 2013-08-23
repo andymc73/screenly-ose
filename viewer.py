@@ -258,6 +258,13 @@ def browser_socket(command, timeout=0.5):
     """
 
     uzbl_socket = "/tmp/uzbl_socket_%d" % browser_pid
+    
+    # On at least debian squeeze amd64 (at least) the suffix is not a pid but instead the
+    # same suffix as per the fifo
+    if not path.exists(uzbl_socket):   # fixme use S_ISSOCKET or something
+        f = get_fifo()
+        uzbl_socket = "/tmp/uzbl_socket_%s" % f.split("_", 2)[2]
+    
     r = sh.socat("-t%f" % timeout, "-", "unix-connect:%s" % uzbl_socket, _in=command + "\n", _timeout=2)
     # Very spammy.
     # logging.debug("browser_socket(%r) -> %r" % (command, r))
