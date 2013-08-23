@@ -37,8 +37,10 @@ current_browser_url = None
 # Detect the architecture and load the proper video player
 arch = machine()
 if arch == 'armv6l':
+    logging.info("Detected armv6l (assume its a Raspberry Pi).")
     from sh import omxplayer
 elif arch in ['x86_64', 'x86_32']:
+    logging.info("Detected x86 (%s-bit)." % arch[-2:])
     from sh import mplayer
 
 # Used by send_to_front.
