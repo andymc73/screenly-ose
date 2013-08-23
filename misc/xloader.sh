@@ -2,6 +2,7 @@
 
 # Script modified by Andrew McDonnell bugs@andrewmcdonnell.net under GPLv2
 # - added SCREENLY_DIR and STARTUP_DELAY environment variables
+# - suppress errors when killing non-existent processes
 
 # Ordinarily wait 5 seconds before starting, to give system time to settle.
 # When developing we want to skip that, so set in environment
@@ -43,8 +44,8 @@ while true
 do
 	# Clean up in case of an unclean exit
 	echo "Cleaning up..." >> $LOG
-	killall uzbl-core
-	killall omxplayer omxplayer.bin
+	killall uzbl-core 2> /dev/null
+	killall omxplayer omxplayer.bin 2> /dev/null
 	rm -f /tmp/uzbl_*
 	rm -f /tmp/screenly_html/*
 
