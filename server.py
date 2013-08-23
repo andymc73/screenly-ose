@@ -13,7 +13,20 @@ from hurry.filesize import size
 from os import path, makedirs, getloadavg, statvfs, mkdir, getenv
 from re import split as re_split
 from sh import git
-from subprocess import check_output
+
+# Not comaptible with python 2.6:
+# from subprocess import check_output
+import subprocess
+try:
+    dont_have_proper_checkoutput = False
+    check_output = subprocess.check_output
+except AttributeError:
+    dont_have_proper_checkoutput = True
+    # Python 2.6 - lesser capable version - doesnt raise CalledProcessError when process returns non-zero
+    # Only used in two places where it looks like we can live with it
+    def check_output(*popenargs, **kwargs):
+        return subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs).communicate()[0]
+            
 from uptime import uptime
 import json
 import os
@@ -290,6 +303,9 @@ def system_info():
         viewlog = check_output(['tail', '-n', '20', viewer_log_file]).split('\n')
     else:
         viewlog = ["(no viewer log present -- is only the screenly server running?)\n"]
+
+    if dont_have_proper_checkoutput:
+        viewlog += ["Warning - if output is empty and you are running Python 2.6, check the tail and tvservice commands."]
 
     # Get load average from last 15 minutes and round to two digits.
     loadavg = round(getloadavg()[2], 2)
