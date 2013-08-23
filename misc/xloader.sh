@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Ordinarily wait 5 seconds before starting, to give system time to settle.
+# When developing we want to skip that, so set in environment
+STARTUP_DELAY=${STARTUP_DELAY:-5}
+
 LOG=/tmp/screenly_xloader.log
 
 echo "Disabling screen power savings..." > $LOG
@@ -8,7 +12,7 @@ xset s off                         # Don't activate screensaver
 xset -dpms                         # Disable DPMS (Energy Star) features
 xset s noblank                     # Don't blank the video device
 
-sleep 5
+sleep $STARTUP_DELAY
 
 echo "Launching infinite loop..." >> $LOG
 while true
