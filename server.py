@@ -36,6 +36,7 @@ import uuid
 from bottle import route, run, request, error, static_file, response
 from bottle import HTTPResponse
 from bottlehaml import haml_template
+from bottle import debug
 
 import db
 import queries
@@ -366,7 +367,7 @@ if __name__ == "__main__":
     # Create config dir if it doesn't exist
     if not path.isdir(settings.get_configdir()):
         makedirs(settings.get_configdir())
-
+        
     with db.conn(settings['database']) as conn:
         global db_conn
         db_conn = conn
@@ -374,6 +375,7 @@ if __name__ == "__main__":
             c.execute(queries.exists_table)
             if c.fetchone() is None:
                 c.execute(assets_helper.create_assets_table)
+        debug(True)
         run(host=settings.get_listen_ip(),
             port=settings.get_listen_port(),
             reloader=True)

@@ -27,7 +27,7 @@ DEFAULTS = {
 }
 
 # Initiate logging
-logging.basicConfig(level=logging.INFO,
+logging.basicConfig(level=logging.DEBUG,
                     filename='/tmp/screenly_viewer.log',
                     format='%(asctime)s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S')
