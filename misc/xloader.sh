@@ -8,6 +8,8 @@ STARTUP_DELAY=${STARTUP_DELAY:-5}
 # directory is wrong! Override it in your environment as needed.
 SCREENLY_DIR=${SCREENLY_DIR:-~/screenly}
 
+# Note: to check python logs look in /tmp/screenly_viewer.log
+# Change 'debug_logging = True' in the settings file ~/.screenly/screenly.conf
 LOG=/tmp/screenly_xloader.log
 
 # If SCREENLY_DIR not set, apply a heuristic to check other defaults
@@ -45,4 +47,6 @@ do
 
 	# Launch the viewer
 	python "$SCREENLY_DIR/viewer.py" >> $LOG 2>&1
+	
+	# One downside of this loop is you need to hit CTRL+C twice in quick succession to break out
 done
