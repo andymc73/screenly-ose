@@ -332,7 +332,7 @@ def splash_page():
     my_ip = get_node_ip()
     if my_ip:
         ip_lookup = True
-        url = "http://{}:{}".format(my_ip, settings.get_listen_port())
+        url = "http://{0}:{1}".format(my_ip, settings.get_listen_port())
     else:
         ip_lookup = False
         url = "Unable to look up your installation's IP address."
