@@ -1,7 +1,7 @@
 Instructions for testing off of the Raspberry Pi - 
 Example using Debian Squeeze:
 
-apt-get install python-requests python-netifaces uzbl socat feh
+apt-get install python-requests python-netifaces python-pip python-virtualenv uzbl socat feh
 cd directory/above/screenly
 mkdir mypy
 virtualenv mypy
