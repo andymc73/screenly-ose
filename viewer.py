@@ -336,7 +336,7 @@ def view_image(uri, duration):
     logging.debug('Displaying image %s for %s seconds.' % (uri, duration))
 
     if asset_is_accessible(uri):
-        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1280x680+0+40", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
+        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1280x656+0+64", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
         # Wait until feh is starting before clearing the browser. This minimises delay between
         # web and image content.
         browser_clear()
