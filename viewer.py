@@ -336,11 +336,10 @@ def view_image(uri, duration):
     logging.debug('Displaying image %s for %s seconds.' % (uri, duration))
 
     if asset_is_accessible(uri):
-        run = sh.feh(uri, scale_down=True, borderless=True, fullscreen=True, cycle_once=True, slideshow_delay=duration, _bg=True)
+        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1280x680+0+40", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
         # Wait until feh is starting before clearing the browser. This minimises delay between
         # web and image content.
         browser_clear()
-        send_to_front("feh")
         send_to_front("TICKER")
         run.wait()
     else:
@@ -418,7 +417,6 @@ def toggle_load_screen(status=True):
         else:
             # If we're already showing the load screen, just make sure it's on top.
             send_to_front("feh")
-            send_to_front("TICKER")
     elif not status and load_screen_pid:
         logging.debug("Killing load screen with PID: %d." % load_screen_pid)
         kill(load_screen_pid, signal.SIGTERM)
