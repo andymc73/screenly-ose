@@ -417,6 +417,7 @@ def toggle_load_screen(status=True):
         else:
             # If we're already showing the load screen, just make sure it's on top.
             send_to_front("feh")
+            send_to_front("TICKER")
     elif not status and load_screen_pid:
         logging.debug("Killing load screen with PID: %d." % load_screen_pid)
         kill(load_screen_pid, signal.SIGTERM)
