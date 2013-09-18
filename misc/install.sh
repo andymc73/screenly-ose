@@ -2,7 +2,7 @@
 
 # If SCREENLY_DIR not set, apply a heuristic to check other defaults
 if ! test -d "$SCREENLY_DIR" ; then
-  SCREENLY_DIR=~/screenly-ose
+  SCREENLY_DIR=~/screenly
 fi
 
 echo "Installing Screenly OSE (beta)"
