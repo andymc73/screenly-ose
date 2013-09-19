@@ -46,6 +46,9 @@ elif arch in ['x86_64', 'x86_32']:
 # Used by send_to_front.
 libx11 = cdll.LoadLibrary('libX11.so')
 
+def reraise_ticker():
+    system("wmctrl -r TICKERTICKER -b add,above")
+    system("wmctrl -r TICKERTICKER -b remove,maximized_vert,maximized_horz")
 
 def send_to_front(name):
     """Instruct X11 to bring a window with the given name in its title to front."""
@@ -336,11 +339,11 @@ def view_image(uri, duration):
     logging.debug('Displaying image %s for %s seconds.' % (uri, duration))
 
     if asset_is_accessible(uri):
-        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1280x624+0+96", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
+        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1200x624+0+96", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
         # Wait until feh is starting before clearing the browser. This minimises delay between
         # web and image content.
         browser_clear()
-        send_to_front("TICKER")
+        reraise_ticker()
         run.wait()
     else:
         logging.debug('Received non-200 status (or file not found if local) from %s. Skipping.' % (uri))
@@ -362,6 +365,7 @@ def view_video(uri):
         # web and image content. Omxplayer will run on top of the browser so the delay in clearing
         # won't be visible. This minimises delay between web and video.
         browser_clear()
+        reraise_ticker()
         run.wait()
 
         if run.exit_code != 0:
@@ -395,6 +399,7 @@ def view_web(url, duration):
         logging.debug('Displaying url %s for %s seconds.' % (url, duration))
 
         browser_url(url)
+        reraise_ticker()
 
         sleep(int(duration))
     else:
