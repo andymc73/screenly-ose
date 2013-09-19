@@ -217,7 +217,7 @@ def load_browser():
 
     if settings['show_splash']:
         # Show splash screen for 60 seconds.
-        sleep(60)
+        sleep(30)
     else:
         # Give browser some time to start (we have seen multiple uzbl running without this)
         sleep(10)
@@ -336,7 +336,7 @@ def view_image(uri, duration):
     logging.debug('Displaying image %s for %s seconds.' % (uri, duration))
 
     if asset_is_accessible(uri):
-        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1280x656+0+64", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
+        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1280x624+0+96", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
         # Wait until feh is starting before clearing the browser. This minimises delay between
         # web and image content.
         browser_clear()
