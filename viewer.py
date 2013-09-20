@@ -46,6 +46,15 @@ elif arch in ['x86_64', 'x86_32']:
 # Used by send_to_front.
 libx11 = cdll.LoadLibrary('libX11.so')
 
+def reraise_ticker():
+    system("wmctrl -r TICKERTICKER -b add,above")
+    system("wmctrl -r xclock -b add,above")
+    system("wmctrl -r TICKERTICKER -b remove,maximized_vert")
+    # system("wmctrl -r TICKERTICKER -b add,maximized_horz")
+
+def remaximise_browser():
+    system("wmctrl -r Uzbl -b add,maximized_vert,maximized_horz")
+
 
 def send_to_front(name):
     """Instruct X11 to bring a window with the given name in its title to front."""
@@ -210,6 +219,7 @@ def load_browser():
     else:
         browser_load_url = black_page
 
+    system("rm /tmp/uzbl_*")
     browser = sh.Command('uzbl-browser')(uri=browser_load_url, _bg=True)
     current_browser_url = browser_load_url
 
@@ -217,7 +227,11 @@ def load_browser():
 
     if settings['show_splash']:
         # Show splash screen for 60 seconds.
-        sleep(30)
+        sleep(10)
+        logging.info('remaxing...')
+        remaximise_browser()
+        logging.info('remaxed...')
+        sleep(20)
     else:
         # Give browser some time to start (we have seen multiple uzbl running without this)
         sleep(10)
@@ -318,6 +332,7 @@ def browser_url(url):
         fifo = get_fifo()
         disable_browser_status()
 
+    remaximise_browser()
     global current_browser_url
 
     if url == current_browser_url:
@@ -336,11 +351,13 @@ def view_image(uri, duration):
     logging.debug('Displaying image %s for %s seconds.' % (uri, duration))
 
     if asset_is_accessible(uri):
-        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1280x624+0+96", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
+        geom="1920x1080"
+        geom2="1200x624"
+        run = sh.feh(uri, scale_down=True, borderless=True, geometry="1920x900+0+128", hide_pointer=True, image_bg="black", cycle_once=True, slideshow_delay=duration, _bg=True)
         # Wait until feh is starting before clearing the browser. This minimises delay between
         # web and image content.
         browser_clear()
-        send_to_front("TICKER")
+        reraise_ticker()
         run.wait()
     else:
         logging.debug('Received non-200 status (or file not found if local) from %s. Skipping.' % (uri))
@@ -362,6 +379,7 @@ def view_video(uri):
         # web and image content. Omxplayer will run on top of the browser so the delay in clearing
         # won't be visible. This minimises delay between web and video.
         browser_clear()
+        reraise_ticker()
         run.wait()
 
         if run.exit_code != 0:
@@ -395,6 +413,7 @@ def view_web(url, duration):
         logging.debug('Displaying url %s for %s seconds.' % (url, duration))
 
         browser_url(url)
+        reraise_ticker()
 
         sleep(int(duration))
     else:
@@ -409,6 +428,8 @@ def toggle_load_screen(status=True):
     load_screen = HOME + 'screenly/loading.jpg'
     global load_screen_pid
 
+    logging.debug("Toggle Load Screen %s" % status)
+
     if status and path.isfile(load_screen):
         if not load_screen_pid:
             image_loader = sh.feh(load_screen, scale_down=True, borderless=True, fullscreen=True, _bg=True)
@@ -417,12 +438,12 @@ def toggle_load_screen(status=True):
         else:
             # If we're already showing the load screen, just make sure it's on top.
             send_to_front("feh")
-            send_to_front("TICKER")
     elif not status and load_screen_pid:
         logging.debug("Killing load screen with PID: %d." % load_screen_pid)
         kill(load_screen_pid, signal.SIGTERM)
         load_screen_pid = None
 
+    logging.debug("Toggled Load Screen pid=%s" % load_screen_pid)
     return load_screen_pid
 
 
@@ -527,6 +548,11 @@ if __name__ == "__main__":
     if not is_pro_init:
         toggle_load_screen(False)
 
+   
+        logging.info('remaxing...2')
+        remaximise_browser()
+        logging.info('remaxed...')
+
     # Wait until initialized (Pro only).
     did_show_pin = False
     did_show_claimed = False
@@ -559,6 +585,7 @@ if __name__ == "__main__":
     # Infinite loop.
     logging.debug('Entering infinite loop.')
     while True:
+        remaximise_browser()
         asset = scheduler.get_next_asset()
         logging.debug('got asset %s' % asset)
 

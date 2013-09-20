@@ -338,7 +338,10 @@ def splash_page():
         ip_lookup = False
         url = "Unable to look up your installation's IP address."
 
-    return template('splash_page', ip_lookup=ip_lookup, url=url)
+    extra = ''
+    if os.path.isfile( 'views/splash_page_extra.haml'):
+        extra = haml_template( 'splash_page_extra', {} )
+    return template('splash_page', ip_lookup=ip_lookup, url=url, splash_extra=extra)
 
 
 @error(403)

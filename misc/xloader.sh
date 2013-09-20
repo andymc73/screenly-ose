@@ -7,7 +7,7 @@
 
 # Ordinarily wait 5 seconds before starting, to give system time to settle.
 # When developing we want to skip that, so set in environment
-STARTUP_DELAY=${STARTUP_DELAY:-5}
+STARTUP_DELAY=${STARTUP_DELAY:-30}
 
 # Note, when developing and testing from a git checkout of screenly-ose, the default
 # directory is wrong! Override it in your environment as needed.
@@ -42,7 +42,10 @@ xset s off                         # Don't activate screensaver
 xset -dpms                         # Disable DPMS (Energy Star) features
 xset s noblank                     # Don't blank the video device
 
+echo "Sleep $STARTUP_DELAY" >> $LOG
 sleep $STARTUP_DELAY
+/sbin/ifconfig >> $LOG
+ps -ef >> $LOG
 
 echo "Launching infinite loop..." >> $LOG
 
