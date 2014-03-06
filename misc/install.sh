@@ -49,7 +49,7 @@ echo "@$SCREENLY_DIR/misc/xloader.sh" > ~/.config/lxsession/LXDE/autostart
 
 echo "Increasing swap space to 500MB..."
 echo "CONF_SWAPSIZE=500" > ~/dphys-swapfile
-sudo cp /etc/dphys-swapfile /etc/dphys-swapfile.bak
+sudo cp /etc/dphys-swapfile /etc/dphys-swapfile.modified_by_screenly
 sudo mv ~/dphys-swapfile /etc/dphys-swapfile
 
 echo "Adding Screenly's config-file"
@@ -58,10 +58,10 @@ cp "$SCREENLY_DIR/misc/screenly.conf" $CONFIG_DIR
 
 echo "Enabling Watchdog..."
 sudo modprobe bcm2708_wdog > /dev/null
-sudo cp /etc/modules /etc/modules.bak
+sudo cp /etc/modules /etc/modules.modified_by_screenly
 sudo sed '$ i\bcm2708_wdog' -i /etc/modules
 sudo chkconfig watchdog on
-sudo cp /etc/watchdog.conf /etc/watchdog.conf.bak
+sudo cp /etc/watchdog.conf /etc/watchdog.conf.modified_by_screenly
 sudo sed -e 's/#watchdog-device/watchdog-device/g' -i /etc/watchdog.conf
 sudo /etc/init.d/watchdog start
 
@@ -73,11 +73,11 @@ sudo /etc/init.d/supervisor start > /dev/null
 echo "Making modifications to X..."
 [ -f ~/.gtkrc-2.0 ] && rm -f ~/.gtkrc-2.0
 ln -s "$SCREENLY_DIR/misc/gtkrc-2.0" ~/.gtkrc-2.0
-[ -f ~/.config/openbox/lxde-rc.xml ] && mv ~/.config/openbox/lxde-rc.xml ~/.config/openbox/lxde-rc.xml.bak
+[ -f ~/.config/openbox/lxde-rc.xml ] && mv ~/.config/openbox/lxde-rc.xml ~/.config/openbox/lxde-rc.xml.modified_by_screenly
 [ -d ~/.config/openbox ] || mkdir -p ~/.config/openbox
 ln -s "$SCREENLY_DIR/misc/lxde-rc.xml" ~/.config/openbox/lxde-rc.xml
-[ -f ~/.config/lxpanel/LXDE/panels/panel ] && mv ~/.config/lxpanel/LXDE/panels/panel ~/.config/lxpanel/LXDE/panels/panel.bak
-[ -f /etc/xdg/lxsession/LXDE/autostart ] && sudo mv /etc/xdg/lxsession/LXDE/autostart /etc/xdg/lxsession/LXDE/autostart.bak
+[ -f ~/.config/lxpanel/LXDE/panels/panel ] && mv ~/.config/lxpanel/LXDE/panels/panel ~/.config/lxpanel/LXDE/panels/panel.modified_by_screenly
+[ -f /etc/xdg/lxsession/LXDE/autostart ] && sudo mv /etc/xdg/lxsession/LXDE/autostart /etc/xdg/lxsession/LXDE/autostart.modified_by_screenly
 sudo sed -e 's/^#xserver-command=X$/xserver-command=X -nocursor/g' -i /etc/lightdm/lightdm.conf
 
 # Make sure we have proper framebuffer depth.
@@ -95,7 +95,7 @@ else
 fi
 
 echo "Quiet the boot process..."
-sudo cp /boot/cmdline.txt /boot/cmdline.txt.bak
+sudo cp /boot/cmdline.txt /boot/cmdline.txt.modified_by_screenly
 sudo sed 's/$/ quiet/' -i /boot/cmdline.txt
 
 echo "Assuming no errors were encountered, go ahead and restart your computer."
