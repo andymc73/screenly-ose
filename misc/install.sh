@@ -3,6 +3,11 @@
 # Allow use in a fresh environment, in locations chosen by the customising developer or end user
 # and this avoids having hard-coded paths, etc.
 
+# If SCREENLY_GITHUB not set, apply a heuristic to check other defaults
+if test -z "$SCREENLY_GITHUB" ; then
+  SCREENLY_GITHUB=git://github.com/wireload/screenly-ose.git
+fi
+
 # If SCREENLY_DIR not set, apply a heuristic to check other defaults
 if ! test -z "$SCREENLY_DIR" ; then
   SCREENLY_DIR=~/screenly
@@ -30,7 +35,7 @@ echo "Installing dependencies..."
 sudo apt-get -y -qq install git-core python-pip python-netifaces python-simplejson python-imaging python-dev uzbl sqlite3 supervisor omxplayer x11-xserver-utils libx11-dev watchdog chkconfig feh > /dev/null
 
 echo "Downloading Screenly-OSE..."
-git clone git://github.com/wireload/screenly-ose.git "$SCREENLY_DIR" > /dev/null
+git clone "$SCREENLY_GITHUB" "$SCREENLY_DIR" > /dev/null
 
 echo "Installing more dependencies..."
 sudo pip install -r "$SCREENLY_DIR/requirements.txt" -q > /dev/null
