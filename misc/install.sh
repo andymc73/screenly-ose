@@ -13,6 +13,9 @@ if ! test -z "$SCREENLY_DIR" ; then
   SCREENLY_DIR=~/screenly
 fi
 
+# More path defaults
+CONFIG_DIR=~/.screenly/
+
 echo "Installing Screenly OSE (beta)"
 
 ## Simple disk storage check. Naively assumes root partition holds all system data.
@@ -50,8 +53,8 @@ sudo cp /etc/dphys-swapfile /etc/dphys-swapfile.bak
 sudo mv ~/dphys-swapfile /etc/dphys-swapfile
 
 echo "Adding Screenly's config-file"
-mkdir -p ~/.screenly
-cp "$SCREENLY_DIR/misc/screenly.conf" ~/.screenly/
+mkdir -p $CONFIG_DIR
+cp "$SCREENLY_DIR/misc/screenly.conf" $CONFIG_DIR
 
 echo "Enabling Watchdog..."
 sudo modprobe bcm2708_wdog > /dev/null
