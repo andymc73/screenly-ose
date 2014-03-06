@@ -37,8 +37,14 @@ sudo apt-get -y -qq upgrade > /dev/null
 echo "Installing dependencies..."
 sudo apt-get -y -qq install git-core python-pip python-netifaces python-simplejson python-imaging python-dev uzbl sqlite3 supervisor omxplayer x11-xserver-utils libx11-dev watchdog chkconfig feh > /dev/null
 
-echo "Downloading Screenly-OSE..."
-git clone "$SCREENLY_GITHUB" "$SCREENLY_DIR" > /dev/null
+# If we are running this _inside_ the same working copy then we dont want to clone it!
+SDEST=$(cd "$SCREENLY_DIR" && pwd)
+if [ "$SDEST" == "$(pwd)" ] ; then
+  echo "Assuming you are installing from inside working copy."
+else
+  echo "Downloading Screenly-OSE from $SCREENLY_GITHUB ..."
+  git clone "$SCREENLY_GITHUB" "$SCREENLY_DIR" > /dev/null
+fi
 
 echo "Installing more dependencies..."
 sudo pip install -r "$SCREENLY_DIR/requirements.txt" -q > /dev/null
