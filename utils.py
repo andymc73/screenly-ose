@@ -39,7 +39,7 @@ def validate_url(string):
 def get_node_ip():
     """Returns the node's IP, for the interface
     that is being used as the default gateway.
-    This shuld work on both MacOS X and Linux."""
+    This should work on both MacOS X and Linux."""
 
     try:
         default_interface = grep(netstat('-nr'), '-e', '^default', '-e' '^0.0.0.0').split()[-1]
