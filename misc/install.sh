@@ -9,7 +9,7 @@ if test -z "$SCREENLY_GITHUB" ; then
 fi
 
 # If SCREENLY_DIR not set, apply a heuristic to check other defaults
-if ! test -z "$SCREENLY_DIR" ; then
+if test -z "$SCREENLY_DIR" ; then
   SCREENLY_DIR=~/screenly
 fi
 
