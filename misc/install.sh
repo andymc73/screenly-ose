@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Allow use in a fresh environment, in locations chosen by the customising developer or end user
+# The following variables allow use in a fresh environment, in locations chosen by the customising developer or end user,
 # and this avoids having hard-coded paths, etc.
 
 # If SCREENLY_GITHUB not set, apply a heuristic to check other defaults
@@ -104,6 +104,9 @@ ln -s "$SCREENLY_DIR/misc/gtkrc-2.0" ~/.gtkrc-2.0
 [ -f ~/.config/openbox/lxde-rc.xml ] && mv ~/.config/openbox/lxde-rc.xml ~/.config/openbox/lxde-rc.xml.modified_by_screenly
 [ -d ~/.config/openbox ] || mkdir -p ~/.config/openbox
 ln -s "$SCREENLY_DIR/misc/lxde-rc.xml" ~/.config/openbox/lxde-rc.xml
+[ -f ~/.config/openbox/environment ] && cp ~/.config/openbox/environment ~/.config/openbox/environment.modified_by_screenly
+echo "export SCREENLY_DIR=$SCREENLY_DIR" >> ~/.config/openbox/environment
+
 [ -f ~/.config/lxpanel/LXDE/panels/panel ] && mv ~/.config/lxpanel/LXDE/panels/panel ~/.config/lxpanel/LXDE/panels/panel.modified_by_screenly
 [ -f /etc/xdg/lxsession/LXDE/autostart ] && sudo mv /etc/xdg/lxsession/LXDE/autostart /etc/xdg/lxsession/LXDE/autostart.modified_by_screenly
 sudo sed -e 's/^#xserver-command=X$/xserver-command=X -nocursor/g' -i /etc/lightdm/lightdm.conf

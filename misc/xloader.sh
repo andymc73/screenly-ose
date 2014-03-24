@@ -2,6 +2,8 @@
 
 LOG=/tmp/screenly_xloader.log
 
+source ~/.config/openbox/environment
+
 # If SCREENLY_DIR not set, apply a heuristic to check other defaults
 if test -z "$SCREENLY_DIR" ; then
   SCREENLY_DIR=~/screenly
