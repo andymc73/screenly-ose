@@ -28,9 +28,9 @@ EMPTY_PL_DELAY = 5  # secs
 BLACK_PAGE = '/tmp/screenly_html/black_page.html'
 WATCHDOG_PATH = '/tmp/screenly.watchdog'
 SCREENLY_HTML = '/tmp/screenly_html/'
-LOAD_SCREEN = '/screenly/loading.jpg'  # relative to $HOME
-UZBLRC = '/screenly/misc/uzbl.rc'  # relative to $HOME
-INTRO = '/screenly/intro-template.html'
+LOAD_SCREEN = '/loading.jpg'  # relative to $SCREENLY_DIR  # Fixme use path.join
+UZBLRC = '/misc/uzbl.rc'  # relative to $SCREENLY_DIR
+INTRO = '/intro-template.html'
 
 current_browser_url = None
 browser = None
@@ -136,7 +136,7 @@ def load_browser(url=None):
     logging.info('Browser loading %s. Running as PID %s.', current_browser_url, browser.pid)
 
     uzbl_rc = 'set ssl_verify = {}\n'.format('1' if settings['verify_ssl'] else '0')
-    with open(HOME + UZBLRC) as f:  # load uzbl.rc
+    with open(SCREENLY_DIR + UZBLRC) as f:  # load uzbl.rc
         uzbl_rc = f.read() + uzbl_rc
     browser_send(uzbl_rc)
 
@@ -250,7 +250,7 @@ def pro_init():
 
     if is_pro_init:
         logging.debug('Detected Pro initiation cycle.')
-        load_browser(url=HOME+INTRO)
+        load_browser(url=SCREENLY_DIR+INTRO)
     else:
         return False
 
@@ -281,7 +281,7 @@ def asset_loop(scheduler):
 
     if asset is None:
         logging.info('Playlist is empty. Sleeping for %s seconds', EMPTY_PL_DELAY)
-        view_image(HOME + LOAD_SCREEN)
+        view_image(SCREENLY_DIR + LOAD_SCREEN)
         sleep(EMPTY_PL_DELAY)
 
     elif path.isfile(asset['uri']) or not url_fails(asset['uri']):
@@ -309,8 +309,10 @@ def asset_loop(scheduler):
 
 
 def setup():
-    global HOME, arch, db_conn
+    global HOME, SCREENLY_DIR, arch, db_conn
     HOME = getenv('HOME', '/home/pi')
+    SCREENLY_DIR = getenv('SCREENLY_DIR', HOME + '/screenly')
+
     arch = machine()
 
     signal(SIGUSR1, sigusr1)
