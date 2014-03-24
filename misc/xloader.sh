@@ -2,6 +2,11 @@
 
 LOG=/tmp/screenly_xloader.log
 
+# If SCREENLY_DIR not set, apply a heuristic to check other defaults
+if test -z "$SCREENLY_DIR" ; then
+  SCREENLY_DIR=~/screenly
+fi
+
 echo "Disabling screen power savings..." > $LOG
 
 xset s off          # Don't activate screensaver
@@ -22,5 +27,5 @@ do
 	rm -f /tmp/screenly_html/*
 
 	# Launch the viewer
-	python ~/screenly/viewer.py >> $LOG 2>&1
+	python $SCREENLY_DIR/viewer.py >> $LOG 2>&1
 done
