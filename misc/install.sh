@@ -10,7 +10,11 @@ fi
 
 # If SCREENLY_DIR not set, apply a heuristic to check other defaults
 if test -z "$SCREENLY_DIR" ; then
-  SCREENLY_DIR=~/screenly
+  if test -d .git && test -d misc && test -d views && test -f viewer.py  ; then
+    SCREENLY_DIR=`pwd`
+  else
+    SCREENLY_DIR=~/screenly
+  fi
 fi
 
 # More path defaults
@@ -59,8 +63,9 @@ fi
 
 sudo apt-get -y -qq install git-core python-pip python-netifaces python-simplejson python-imaging python-dev uzbl sqlite3 supervisor omxplayer x11-xserver-utils libx11-dev watchdog chkconfig feh > /dev/null
 
-# If we are running this _inside_ the same working copy then we dont want to clone it!
 SDEST=$(cd "$SCREENLY_DIR" && pwd)
+
+# If we are running this _inside_ the same working copy then we dont want to clone it!
 if [ "$SDEST" == "$(pwd)" ] ; then
   echo "Assuming you are installing from inside working copy."
 else
