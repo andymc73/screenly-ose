@@ -10,7 +10,7 @@ __email__ = "bugs@andrewmcdonnell.net"
 import sys
 import os
 import csv
-
+import datetime
 import uuid
 import os
 import os.path
@@ -24,7 +24,7 @@ from contextlib import contextmanager
 
 #
 # Expects a CSV with several columns:
-# (1) Start Date and time
+# (1) Start Date and time - time defaults to midnight if omitted
 # (2) Finish Date and time - time defaults to midnight if omitted
 # (3) Display Duration, seconds
 # (4) Text to render with image magick if picture doesnt work
@@ -67,8 +67,16 @@ create = lambda keys: 'insert into assets (' + comma(keys) + ') values (' + comm
 with open(sys.argv[1], 'rb') as csvfile:
   r = csv.reader(csvfile)
   for row in r:
-    start = row[0]
-    finish = row[1]
+    s = row[0].split(" ")
+    f = row[1].split(" ")
+    if len(s) > 1:
+      start = datetime.datetime.strptime(row[0], "%Y-%m-%d %H:%M:%S")
+    else:
+      start = datetime.datetime.strptime(s[0], "%Y-%m-%d")
+    if len(f) > 1:
+      finish = datetime.datetime.strptime(row[1], "%Y-%m-%d %H:%M:%S")
+    else:
+      finish = datetime.datetime.strptime(f[0], "%Y-%m-%d")
     duration = row[2]
     title = row[3] # fixme - escape single quotes from this
     image = ""
@@ -83,6 +91,8 @@ with open(sys.argv[1], 'rb') as csvfile:
       cmd = "convert -background black -fill yellow -font Courier -format png -size 640x400 -pointsize 28 -gravity center label:'%s' 'png:%s'" % (title, os.path.join( asset_path, asset_id))
       #print cmd
       os.system( cmd)
+
+    # datetime.datetime(2013, 1, 19, 23, 59)
 
     asset = {
         'asset_id': asset_id,
