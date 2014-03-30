@@ -75,6 +75,9 @@ fi
 
 echo "Installing more dependencies..."
 sudo pip install -r "$SCREENLY_DIR/requirements.txt" -q > /dev/null
+sudo pip install --upgrade sh
+sudo pip install --upgrade uptime
+sudo pip install --upgrade six
 
 echo "Adding Screenly to X auto start..."
 mkdir -p ~/.config/lxsession/LXDE/
