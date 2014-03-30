@@ -97,7 +97,7 @@ with open(sys.argv[1], 'rb') as csvfile:
     asset = {
         'asset_id': asset_id,
         'name': title,
-        'uri': os.path.join(asset_dir, asset_id),
+        'uri': os.path.join(asset_path, asset_id),
         'start_date': start,
         'end_date': finish,
         'duration': duration,
